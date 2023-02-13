@@ -1,2 +1,3 @@
-# KitabKhana_A_book_store
+# KitabKhana - An online book store
+
 A book store with basic CRUD functionality.
