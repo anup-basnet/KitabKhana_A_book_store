@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MdShoppingBasket, MdAdd, MdLogout } from 'react-icons/md'
 import { motion } from 'framer-motion'
-import { json, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Avatar from '/src/assets/avatar.png'
 import { useStateValue } from '../context/StateProvider';
 
@@ -28,6 +28,16 @@ const Header = () => {
         } else {
             setIsMenu(!isMenu);
         }
+    }
+
+    const logout = () => {
+        setIsMenu(false);
+        localStorage.clear();
+        
+        dispatch({
+            type: actionType.SET_USER,
+            user : null,
+        });
     }
 
     return (
@@ -81,7 +91,8 @@ const Header = () => {
                                 )
                             }
                             
-                            <p className='px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-slate-100 transistion-all duration-100 ease-in-out text-textColor text-base'>Logout <MdLogout /></p>
+                            <p className='px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-slate-100 transistion-all duration-100 ease-in-out text-textColor text-base'
+                            onClick={logout}>Logout <MdLogout /></p>
                         </motion.div>
                             )
                         }
