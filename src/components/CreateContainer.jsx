@@ -7,6 +7,15 @@ import Loader from './Loader';
 import data from '../utils/data';
 import { categories } from '../utils/data';
 
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage } from "../firebase.config";
+
+
 const CreateContainer = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -20,16 +29,84 @@ const CreateContainer = () => {
   const [msg, setMsg] = useState("Oops!!");
   const [isLoading, setIsLoading] = useState(false);
 
-  const uploadImage = () => {
+  const uploadImage = (e) => {
+    setIsLoading(true);
+    const imageFile = e.target.files[0];
+    const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
+    uploadTask.on('state_changed', (snapshot) => {
+      const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    }, (error) => {
+      console.log(error);
+      setFields(true);
+      setMsg('Error while uploading: Try Again ❌');
+      setAlertStatus('danger')
+      setTimeout(() => {
+        setFields(false)
+        setIsLoading(false)
+      }, 4000);
+    }, () => {
+      getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+        setImageAsset(downloadURL);
+        setIsLoading(false)
+        setFields(true);
+        setMsg('Image uploaded successfully 👏')
+        setAlertStatus('success')
+        setTimeout(() => {
+          setFields(false)
+        }, 4000);
+      })
+    })
   }
 
   const deleteImage = () => {
-
+    setIsLoading(true);
+    const deleteRef = ref(storage, imageAsset);
+    deleteObject(deleteRef).then(() => {
+    setImageAsset(null)
+    setIsLoading(false)
+    setFields(true);
+      setMsg('Image deleted successfully 👏')
+      setAlertStatus('success')
+      setTimeout(() => {
+        setFields(false)
+      }, 4000);
+    })
   }
 
   const saveDetails = () => {
-
+    setIsLoading(true);
+    try {
+      if(!title || !author || !price || !body || !imageAsset){
+        setFields(true);
+        setMsg('Required fields cannot be empty!')
+        setAlertStatus('danger')
+        setTimeout(() => {
+          setFields(false);
+          setIsLoading(false);
+        }, 4000);
+      } else {
+        const data = {
+          id: `${Date.now()}`,
+          title: title,
+          author: author,
+          genre: genre,
+          imageURL: imageAsset,
+          price: price,
+          body: body,
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setFields(true);
+      setMsg('Error while uploading: Try Again ❌');
+      setAlertStatus('danger')
+      setTimeout(() => {
+        setFields(false)
+        setIsLoading(false)
+      }, 4000);
+    }
   }
 
   return (
@@ -117,7 +194,7 @@ const CreateContainer = () => {
                       <>
                         <div className="relative h-full">
                           <img src={imageAsset} alt="uploaded image" className='w-full h-full object-cover' />
-                          <button className='absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-100 transition-all ease-in-out'
+                          <button className='absolute bottom-3 -right-32 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-100 transition-all ease-in-out'
                           onClick={deleteImage}>
                             <MdDelete className='text-white' />
                           </button>
