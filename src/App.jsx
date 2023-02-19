@@ -1,12 +1,32 @@
+import { useEffect } from 'react';
+import './index.css'
+
 import Header from './components/Header'
 import { Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import CreateContainer from './components/CreateContainer'
 import MainContainer from './components/MainContainer'
 
-import './index.css'
+import { useStateValue } from './context/StateProvider';
+import { getAllBookItems } from './utils/firebaseFunctions';
+import { actionType } from './context/reducer';
 
 function App() {
+  const [{ bookItems }, dispatch] = useStateValue();
+
+  const fetchData = async () => {
+    await getAllBookItems().then(data => {
+      dispatch({
+        type : actionType.SET_BOOK_ITEMS,
+        bookItems: data,
+      })
+    });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+  
 
   return (
     <AnimatePresence wait>

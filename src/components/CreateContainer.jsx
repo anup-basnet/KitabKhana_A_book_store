@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { IoBookSharp, IoPerson } from 'react-icons/io5';
 import { MdCloudUpload, MdDelete, MdAttachMoney, MdDescription } from 'react-icons/md';
+import Rupees from '../assets/rupee.png';
 
 import Loader from './Loader';
 import data from '../utils/data';
@@ -14,6 +15,9 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { storage } from "../firebase.config";
+import { saveItem } from '../utils/firebaseFunctions';
+import { useStateValue } from '../context/StateProvider';
+
 
 
 const CreateContainer = () => {
@@ -28,6 +32,8 @@ const CreateContainer = () => {
   const [alertStatus, setAlertStatus] = useState("danger");
   const [msg, setMsg] = useState("Oops!!");
   const [isLoading, setIsLoading] = useState(false);
+  const [{ bookItems }, dispatch] = useStateValue();
+
 
   const uploadImage = (e) => {
     setIsLoading(true);
@@ -96,6 +102,15 @@ const CreateContainer = () => {
           price: price,
           body: body,
         }
+        saveItem(data)
+        setIsLoading(false);
+        setFields(true);
+        setMsg('Data uploaded successfully 👏')
+        clearData();
+        setAlertStatus('success')
+        setTimeout(() => {
+          setFields(false)
+        }, 4000);
       }
     } catch (error) {
       console.log(error);
@@ -107,6 +122,24 @@ const CreateContainer = () => {
         setIsLoading(false)
       }, 4000);
     }
+  };
+
+  const clearData = () => {
+    setTitle("")
+    setAuthor("")
+    setImageAsset(null)
+    setGenre("select genre")
+    setPrice("")
+    setBody("")
+  }
+
+  const fetchData = async () => {
+    await getAllBookItems().then(data => {
+      dispatch({
+        type : actionType.SET_BOOK_ITEMS,
+        bookItems: data,
+      })
+    });
   }
 
   return (
@@ -206,7 +239,14 @@ const CreateContainer = () => {
         </div>
 
         <div className="w-full py-2 border-b border-gray-300 flex items-center gap-2">
-          <MdAttachMoney className='text-xl text-gray-700' />
+          <div className='w-5 h-5'>
+            <img 
+              src={Rupees} 
+              alt="rupees icon" 
+              className='text-xl text-gray-700'
+            />
+          </div>
+          {/* <MdAttachMoney className='text-xl text-gray-700' /> */}
           <input 
             type="text" 
             name="price" 

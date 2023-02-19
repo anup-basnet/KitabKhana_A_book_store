@@ -1,5 +1,6 @@
 export const actionType = {
-    SET_USER : 'SET_USER'
+    SET_USER : 'SET_USER',
+    SET_BOOK_ITEMS: 'SET_BOOK_ITEMS',
 }
 
 const reducer = (state, action) => {
@@ -10,6 +11,12 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 user : action.user,
+            };
+
+        case actionType.SET_BOOK_ITEMS:
+            return {
+                ...state,
+                bookItems : action.bookItems,
             };
 
             default:
