@@ -9,6 +9,7 @@ content: [
         150: "150px",
         190: "190px",
         225: "225px",
+        250: "250px",
         275: "275px",
         300: "300px",
         340: "340px",
@@ -24,6 +25,7 @@ content: [
         80: "80px",
         150: "150px",
         225: "225px",
+        250: "250px",
         300: "300px",
         340: "340px",
         370: "370px",
@@ -55,6 +57,7 @@ content: [
         primary: "#f5f3f3",
         cardOverlay: "rgba(256,256,256,0.4)",
         lighttextGray: "#9ca0ab",
+        rowBg: "rgba(255,131,0,0.05)",
         card: "rgba(256,256,256,0.8)",
         cartBg: "#282a2c",
         cartItem: "#2e3033",
@@ -62,5 +65,7 @@ content: [
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

@@ -24,14 +24,14 @@ const HomeContainer = () => {
                 <div className="flex items-center justify-between gap-3">
                     <button 
                     type='button' 
-                    className='bg-gradient-to-br from-orange-400 to-orange-500 w-60 md:w-auto px-4 py-2 rounded-lg hover:shadow-lg transition-all ease-in-out duration-200'
+                    className='bg-gradient-to-br from-orange-400 to-orange-500 w-50 md:w-auto px-4 py-2 rounded-lg hover:shadow-lg transition-all ease-in-out duration-200'
                     >
                         Order Now
                     </button>
 
                     <button 
                     type='button' 
-                    className='bg-gradient-to-br from-orange-400 to-orange-500 w-60 md:w-auto px-4 py-2 rounded-lg hover:shadow-lg transition-all ease-in-out duration-200'
+                    className='bg-gradient-to-br from-orange-400 to-orange-500 w-50 md:w-auto px-4 py-2 rounded-lg hover:shadow-lg transition-all ease-in-out duration-200'
                     >
                         Explore
                     </button>
