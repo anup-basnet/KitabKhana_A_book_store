@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { IoBookSharp } from 'react-icons/io5'
 import { categories } from '../utils/data';
 import { motion } from 'framer-motion';
+import RowContainer from './RowContainer';
+import { useStateValue } from '../context/StateProvider';
 
 const MenuContainer = () => {
-    const [filter, setFilter] = useState('Fiction');
+    const [filter, setFilter] = useState('fiction');
+
+    const [{ bookItems}, dispatch] = useStateValue();
     
 
     return (
@@ -31,8 +35,11 @@ const MenuContainer = () => {
                             </motion.div>
                         ))
                     }
-
                 </div>
+
+                    <div className='w-full'>
+                        <RowContainer flag={false} data={bookItems?.filter(n => n.genre === filter)} />
+                    </div>
             </div>
         </section>
     )

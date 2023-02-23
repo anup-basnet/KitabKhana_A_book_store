@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { MdShoppingBasket } from 'react-icons/md'
 import Rupees from '../assets/rupee.png'
+import NotFound from '../assets/NotFound.svg';
 
 const RowContainer = ({ flag, data, scrollValue }) => {
     const rowContainer = useRef();
@@ -12,19 +13,25 @@ const RowContainer = ({ flag, data, scrollValue }) => {
     return (
         <div 
             ref={rowContainer}
-            className={`w-full flex items-center gap-3 scroll-smooth my-12 pl-2 ${flag ? 'overflow-x-scroll scrollbar-none' : 'overflow-hidden flex-wrap'}`}>
+            className={`w-full flex items-center gap-3 scroll-smooth my-12 pl-2 ${flag ? 'overflow-x-scroll scrollbar-none' : 'overflow-hidden flex-wrap justify-center'}`}>
             
-            {data && data.map(item => (
+            {data?.length > 0 ?
+                data.map(item => (
                 <div 
                     key={item.id} 
                     className="w-250 min-w-[250px] md:w-250 h-auto bg-cardOverlay rounded-lg p-2 backdrop-blur-lg mr-4 hover:drop-shadow-lg">
                     <div className="w-full flex items-center justify-center gap-6">
-                        <motion.img 
+                        <motion.div
                             whileHover={{ scale: 1.1 }}
-                            src={item?.imageURL} 
-                            alt="book"
-                            className='w-40 -mt-1 drop-shadow-2xl' 
-                        />
+                            className='w-auto h-[240px] -mt-1 drop-shadow-2xl'
+                        >
+                            <img 
+                                src={item?.imageURL} 
+                                alt="book"
+                                className='w-full h-full object-contain'
+                                
+                            />
+                        </motion.div>
                         <motion.div
                             whileTap={{ scale: 0.75 }}
                             className="w-8 h-8 rounded-full bg-red-600 hover:shadow-md flex items-center justify-center cursor-pointer ">
@@ -47,11 +54,20 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                         </div>
 
                         <p className='text-textColor text-base md:text-lg'>
-                            ⭐⭐⭐⭐⭐
+                            {
+                            item?.price > 700 ? '⭐⭐⭐⭐⭐' : '⭐⭐⭐⭐'
+                            }
+                            
                         </p>
                     </div>
                 </div>
-            ))}
+            )) : 
+            <div className='w-full flex flex-col items-center justify-center'>
+                <img src={NotFound} className='h-340' /> 
+                <p className='text-xl text-headingColor font-semibold'
+                >Book Items Not Available.</p>
+            </div>
+            }
         </div>
     )
 }
