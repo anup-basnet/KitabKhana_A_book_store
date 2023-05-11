@@ -101,6 +101,7 @@ const CreateContainer = () => {
           imageURL: imageAsset,
           price: price,
           body: body,
+          qty: 1,
         }
         saveItem(data)
         setIsLoading(false);

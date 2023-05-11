@@ -5,10 +5,13 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import RowContainer from './RowContainer'
 import MenuContainer from './MenuContainer'
 import { useStateValue } from '../context/StateProvider'
+import CartContainer from './CartContainer'
 
 const MainContainer = () => {
-  const [{bookItems}, dispatch] = useStateValue();
+  const [{bookItems, cartShow }, dispatch] = useStateValue();
   const [scrollValue, setScrollValue] = useState(0);
+
+  useEffect(() => {}, [scrollValue, cartShow])
 
 
   return (
@@ -18,7 +21,7 @@ const MainContainer = () => {
       <section className="w-full my-12">
         <div className='w-full flex items-center justify-between'>
           <p className="text-2xl font-semibold capitalize text-headingColor relative before:absolute before:rounded-lg before:content before:w-full before:h-1 before:-bottom-2 before:left-0 before:bg-gradient-to-tr from-orange-400 to-orange-600 transition-all ease-in-out">
-            Fiction
+            Top Rated
           </p>
 
           <div className="hidden md:flex items-center gap-3">
@@ -40,10 +43,10 @@ const MainContainer = () => {
         <RowContainer 
           scrollValue={scrollValue}
           flag={true} 
-          data={bookItems?.filter(n => n.genre === 'fiction')} />
+          data={bookItems?.filter(n => n.price >= 700)} />
       </section>
 
-      <section className="w-full">
+      {/* <section className="w-full">
         <div className='w-full flex items-center justify-between'>
           <p className="text-2xl font-semibold capitalize text-headingColor relative before:absolute before:rounded-lg before:content before:w-full before:h-1 before:-bottom-2 before:left-0 before:bg-gradient-to-tr from-orange-400 to-orange-600 transition-all ease-in-out">
             Classics
@@ -69,11 +72,15 @@ const MainContainer = () => {
           scrollValue={scrollValue}
           flag={true} 
           data={bookItems?.filter(n => n.genre === 'classics')} />
-      </section>
+      </section> */}
 
-      <section className="w-full my-6">
-        <MenuContainer />
-      </section>
+      {/* <section className="w-full my-6">
+      </section> */}
+      <MenuContainer />
+
+      {
+        cartShow && <CartContainer />
+      }
 
     </div>
   )

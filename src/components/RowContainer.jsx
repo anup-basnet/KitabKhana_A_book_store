@@ -1,11 +1,39 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { MdShoppingBasket } from 'react-icons/md'
 import Rupees from '../assets/rupee.png'
 import NotFound from '../assets/NotFound.svg';
+import { useStateValue } from '../context/StateProvider';
+import { actionType } from '../context/reducer';
+import { useNavigate, Navigate  } from 'react-router-dom';
 
 const RowContainer = ({ flag, data, scrollValue }) => {
     const rowContainer = useRef();
+    const navigate = useNavigate();
+
+    const [items, setItems] = useState([]);
+    
+    const [{ cartItems }, dispatch] = useStateValue();
+
+    const addToCart = () => {
+        dispatch({
+            type: actionType.SET_CART_ITEMS,
+            cartItems: items,
+        })
+        localStorage.setItem('cartItems', JSON.stringify(items))
+    }
+
+    const showDetails = (item) => {
+        localStorage.setItem('bookInfo', JSON.stringify(item))
+        navigate('/details')
+        console.log(item)
+    }
+
+    useEffect(() => {
+        addToCart();
+    }, [items])
+
+
     useEffect(() => {
         rowContainer.current.scrollLeft += scrollValue;
     }, [scrollValue])
@@ -28,13 +56,14 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                             <img 
                                 src={item?.imageURL} 
                                 alt="book"
-                                className='w-full h-full object-contain'
-                                
+                                className='w-full h-full object-contain cursor-pointer'
+                                onClick={() => showDetails(item)}
                             />
                         </motion.div>
                         <motion.div
                             whileTap={{ scale: 0.75 }}
-                            className="w-8 h-8 rounded-full bg-red-600 hover:shadow-md flex items-center justify-center cursor-pointer ">
+                            className="w-8 h-8 rounded-full bg-red-600 hover:shadow-md flex items-center justify-center cursor-pointer "
+                            onClick={() => setItems([...cartItems, item])}>
                             <MdShoppingBasket className='text-white ' />
                         </motion.div>
                     </div>

@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import CreateContainer from './components/CreateContainer'
 import MainContainer from './components/MainContainer'
+import BookDetails from './components/BookDetails';
 
 import { useStateValue } from './context/StateProvider';
 import { getAllBookItems } from './utils/firebaseFunctions';
@@ -36,6 +37,7 @@ function App() {
           <Routes>
             <Route path='/*' element={<MainContainer />} />
             <Route path='/createItem' element={<CreateContainer />} />
+            <Route path='/details' element={<BookDetails />} />
           </Routes>
         </main>
       </div>
